@@ -19,7 +19,7 @@ on that remote where `a/iso` is mounted to `/data`
 ```
 
 In the likely case that this is NOT exactly the setup you have, modify
-ccontext_install.reg accordingly.
+ccontext_install.reg accordingly. Don't forget to update the path to the binary as well, since its unlikely you place your Rust projects in a directory named java like I do.
 
 For my use case it's configured as Windows, Remote, and Docker. You could get
 creative in the .reg since it's all arg based
