@@ -1,0 +1,36 @@
+Windows Registry Editor Version 5.00
+
+; --- Create the main cascading menu entry ---
+; This adds the "Copy Path as..." menu item.
+; The "AppliesTo" line restricts this menu to ONLY appear
+; for items on the L:\ drive.
+[HKEY_CLASSES_ROOT\*\shell\CopyPathAs]
+"MUIVerb"="Copy Path as..."
+"SubCommands"="CopyPathAs.Windows;CopyPathAs.Remote;CopyPathAs.Docker"
+"Icon"="imageres.dll,16"
+"AppliesTo"="System.ItemPathDisplay:~<\"L:\\\""
+
+; --- Define the commands that the main menu will show ---
+
+; --- Sub-command for Windows Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Windows]
+@="Copy Windows Path"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Windows\command]
+@="\"C:\\dev\\java\\ccontext\\target\\release\\ccontext.exe\" \"%1\""
+
+
+; --- Sub-command for Remote Server Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Remote]
+@="Copy Remote Path"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Remote\command]
+@="\"C:\\dev\\java\\ccontext\\target\\release\\ccontext.exe\" \"%1\" \"/media/\""
+
+
+; --- Sub-command for Docker Container Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Docker]
+@="Copy Docker Path"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Docker\command]
+@="\"C:\\dev\\java\\ccontext\\target\\release\\ccontext.exe\" \"%1\" \"/media/\" \"a/iso\" \"/data\""

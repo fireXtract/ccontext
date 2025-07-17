@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+; This script removes the context menu items created by path_converter.
+
+; --- Remove the main context menu entry ---
+[-HKEY_CLASSES_ROOT\*\shell\CopyPathAs]
+
+; --- Remove the stored shell commands ---
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Windows]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Remote]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Docker]
