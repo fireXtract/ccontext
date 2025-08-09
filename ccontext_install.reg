@@ -1,36 +1,109 @@
 Windows Registry Editor Version 5.00
 
-; --- Create the main cascading menu entry ---
-; This adds the "Copy Path as..." menu item.
-; The "AppliesTo" line restricts this menu to ONLY appear
-; for items on the L:\ drive.
-[HKEY_CLASSES_ROOT\*\shell\CopyPathAs]
-"MUIVerb"="Copy Path as..."
-"SubCommands"="CopyPathAs.Windows;CopyPathAs.Remote;CopyPathAs.Docker"
-"Icon"="imageres.dll,16"
+; ###################################################################################
+; # CCONTEXT - Windows Explorer Context Menu Installer
+; # Targets: All Files and All Folders
+; #
+; # INSTRUCTIONS:
+; # 1. Compile the Rust project (e.g., `cargo build --release`).
+; # 2. Copy the final executable (e.g., `target\release\ccontext.exe`) to a
+; #    permanent location, for example: `C:\Program Files\ccontext\ccontext.exe`
+; # 3. REPLACE ALL instances of the placeholder path
+; #    "C:\\Program Files\\ccontext\\ccontext.exe"
+; #    in this file with the actual path to your executable.
+; #    !! REMEMBER TO USE DOUBLE BACKSLASHES (\\) IN THE PATH !!
+; # 4. Double-click this .reg file to import it into the Windows Registry.
+; ###################################################################################
+
+; ###########################################################################
+; # REGISTRATION FOR FILES
+; ###########################################################################
+
+; --- Menu Entry for the L: drive (shows Zest/Docker options) ---
+[HKEY_CLASSES_ROOT\*\shell\Ccontext_L_Drive]
+"MUIVerb"="Copy path as..."
+"Icon"="C:\\Program Files\\ccontext\\ccontext.exe,0"
+"SubCommands"="Ccontext.Windows;Ccontext.WSL;Ccontext.Cygwin;Ccontext.GitBash;Ccontext.RemoteZest;Ccontext.DockerZest"
 "AppliesTo"="System.ItemPathDisplay:~<\"L:\\\""
 
-; --- Define the commands that the main menu will show ---
+; --- Menu Entry for the J: drive (shows Dev options) ---
+[HKEY_CLASSES_ROOT\*\shell\Ccontext_J_Drive]
+"MUIVerb"="Copy path as..."
+"Icon"="C:\\Program Files\\ccontext\\ccontext.exe,0"
+"SubCommands"="Ccontext.Windows;Ccontext.WSL;Ccontext.Cygwin;Ccontext.GitBash;Ccontext.RemoteDev"
+"AppliesTo"="System.ItemPathDisplay:~<\"J:\\\""
 
-; --- Sub-command for Windows Path ---
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Windows]
-@="Copy Windows Path"
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Windows\command]
-@="\"C:\\dev\\java\\ccontext\\target\\release\\ccontext.exe\" \"%1\""
-
-
-; --- Sub-command for Remote Server Path ---
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Remote]
-@="Copy Remote Path"
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Remote\command]
-@="\"C:\\dev\\java\\ccontext\\target\\release\\ccontext.exe\" \"%1\" \"/media/\""
+; --- Menu Entry for ALL OTHER drives ---
+[HKEY_CLASSES_ROOT\*\shell\Ccontext_OtherDrives]
+"MUIVerb"="Copy path as..."
+"Icon"="C:\\Program Files\\ccontext\\ccontext.exe,0"
+"SubCommands"="Ccontext.Windows;Ccontext.WSL;Ccontext.Cygwin;Ccontext.GitBash"
+"AppliesTo"="NOT System.ItemPathDisplay:~<\"L:\\\" AND NOT System.ItemPathDisplay:~<\"J:\\\""
 
 
-; --- Sub-command for Docker Container Path ---
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Docker]
-@="Copy Docker Path"
+; ###########################################################################
+; # REGISTRATION FOR FOLDERS (Directory)
+; ###########################################################################
+[HKEY_CLASSES_ROOT\Directory\shell\Ccontext_L_Drive]
+"MUIVerb"="Copy path as..."
+"Icon"="C:\\Program Files\\ccontext\\ccontext.exe,0"
+"SubCommands"="Ccontext.Windows;Ccontext.WSL;Ccontext.Cygwin;Ccontext.GitBash;Ccontext.RemoteZest;Ccontext.DockerZest"
+"AppliesTo"="System.ItemPathDisplay:~<\"L:\\\""
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Docker\command]
-@="\"C:\\dev\\java\\ccontext\\target\\release\\ccontext.exe\" \"%1\" \"/media/\" \"a/iso\" \"/data\""
+[HKEY_CLASSES_ROOT\Directory\shell\Ccontext_J_Drive]
+"MUIVerb"="Copy path as..."
+"Icon"="C:\\Program Files\\ccontext\\ccontext.exe,0"
+"SubCommands"="Ccontext.Windows;Ccontext.WSL;Ccontext.Cygwin;Ccontext.GitBash;Ccontext.RemoteDev"
+"AppliesTo"="System.ItemPathDisplay:~<\"J:\\\""
+
+[HKEY_CLASSES_ROOT\Directory\shell\Ccontext_OtherDrives]
+"MUIVerb"="Copy path as..."
+"Icon"="C:\\Program Files\\ccontext\\ccontext.exe,0"
+"SubCommands"="Ccontext.Windows;Ccontext.WSL;Ccontext.Cygwin;Ccontext.GitBash"
+"AppliesTo"="NOT System.ItemPathDisplay:~<\"L:\\\" AND NOT System.ItemPathDisplay:~<\"J:\\\""
+
+; ###########################################################################
+; # COMMAND STORE (Shared by all drive types)
+; ###########################################################################
+
+; --- Standard Windows Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.Windows]
+@="Copy Windows path"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.Windows\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\""
+
+; --- WSL Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.WSL]
+@="Copy WSL path (/mnt/...)"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.WSL\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\" --prefix \"/mnt/\" --map-drive-to-prefix --convert-to-forward-slashes"
+
+; --- Cygwin Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.Cygwin]
+@="Copy Cygwin path (/cygdrive/...)"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.Cygwin\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\" --prefix \"/cygdrive/\" --map-drive-to-prefix --convert-to-forward-slashes"
+
+; --- Git Bash Path ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.GitBash]
+@="Copy Git Bash path (/c/...)"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.GitBash\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\" --prefix \"/\" --map-drive-to-prefix --convert-to-forward-slashes"
+
+; --- Remote Zest Server Path (L: only) ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.RemoteZest]
+@="Copy remote path (/media/...)"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.RemoteZest\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\" --prefix \"/media/\" --strip-drive --convert-to-forward-slashes"
+
+; --- Docker Zest Container Path (L: only) ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.DockerZest]
+@="Copy Docker path (/data/...)"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.DockerZest\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\" --prefix \"/data/\" --strip-drive --convert-to-forward-slashes --strip-leading-path \"zest/t/\""
+
+; --- Remote Dev Server Path (J: only) ---
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.RemoteDev]
+@="Copy remote dev path (/home/you/...)"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.RemoteDev\command]
+@="\"C:\\Program Files\\ccontext\\ccontext.exe\" \"%1\" --prefix \"/home/you/dev\" --strip-drive --convert-to-forward-slashes"
