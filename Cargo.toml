@@ -4,7 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-clipboard-win = "5.4.0"
+clipboard-win = ">=5.4.0"
+clap = ">=4.5.43"
 
 [profile.release]
 codegen-units = 1

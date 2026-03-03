@@ -1,11 +1,20 @@
 Windows Registry Editor Version 5.00
 
-; This script removes the context menu items created by path_converter.
+; This script removes the context menu items created by ccontext_install.reg
 
 ; --- Remove the main context menu entry ---
-[-HKEY_CLASSES_ROOT\*\shell\CopyPathAs]
+[-HKEY_CLASSES_ROOT\*\shell\Ccontext_L_Drive]
+[-HKEY_CLASSES_ROOT\*\shell\Ccontext_J_Drive]
+[-HKEY_CLASSES_ROOT\*\shell\Ccontext_OtherDrives]
+[-HKEY_CLASSES_ROOT\Directory\shell\Ccontext_L_Drive]
+[-HKEY_CLASSES_ROOT\Directory\shell\Ccontext_J_Drive]
+[-HKEY_CLASSES_ROOT\Directory\shell\Ccontext_OtherDrives]
 
 ; --- Remove the stored shell commands ---
-[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Windows]
-[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Remote]
-[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\CopyPathAs.Docker]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.Windows]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.WSL]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.Cygwin]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.GitBash]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.RemoteZest]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.DockerZest]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\Ccontext.RemoteDev]
